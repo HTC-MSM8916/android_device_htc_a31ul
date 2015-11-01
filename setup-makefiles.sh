@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DEVICE=lettuce
-VENDOR=yu
+DEVICE=a31ul
+VENDOR=htc
 
 OUTDIR=vendor/$VENDOR/$DEVICE
 MAKEFILE=../../../$OUTDIR/$DEVICE-vendor-blobs.mk
@@ -156,7 +156,7 @@ EOF
 
 LOCAL_PATH := \$(call my-dir)
 
-ifeq (\$(TARGET_DEVICE),lettuce)
+ifeq (\$(TARGET_DEVICE),a31ul)
 ifeq (\$(QCPATH),)
 
 include \$(CLEAR_VARS)

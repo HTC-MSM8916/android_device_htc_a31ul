@@ -13,17 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
--include device/cyanogen/msm8916-common/BoardConfigCommon.mk
+-include device/htc/msm8916-common/BoardConfigCommon.mk
 
-DEVICE_PATH := device/yu/lettuce
+DEVICE_PATH := device/htc/a31ul
 
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 
 # Kernel
 ifneq ($(FORCE_32_BIT),true)
-TARGET_KERNEL_CONFIG := cyanogenmod_lettuce-64_defconfig
+TARGET_KERNEL_CONFIG := a31ul-64_defconfig
 else
-TARGET_KERNEL_CONFIG := cyanogenmod_lettuce_defconfig
+TARGET_KERNEL_CONFIG := a31ul_defconfig
 endif
 
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
@@ -62,7 +62,7 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 13042155008
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 
 BOARD_SEPOLICY_DIRS += \
-    device/yu/lettuce/sepolicy
+    device/htc/a31ul/sepolicy
 
 BOARD_SEPOLICY_UNION += \
     file.te \
@@ -72,4 +72,4 @@ BOARD_SEPOLICY_UNION += \
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # inherit from the proprietary version
--include vendor/yu/lettuce/BoardConfigVendor.mk
+-include vendor/htc/a31ul/BoardConfigVendor.mk

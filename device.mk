@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-$(call inherit-product-if-exists, vendor/yu/lettuce/lettuce-vendor.mk)
+$(call inherit-product-if-exists, vendor/htc/a31ul/a31ul-vendor.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -116,4 +116,4 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
 # Inherit the rest from msm8916-common
-$(call inherit-product, device/cyanogen/msm8916-common/msm8916.mk)
+$(call inherit-product, device/htc/msm8916-common/msm8916.mk)

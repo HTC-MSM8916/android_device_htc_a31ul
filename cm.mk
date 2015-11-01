@@ -12,24 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(call inherit-product, device/yu/lettuce/full_lettuce.mk)
+$(call inherit-product, device/htc/a31ul/full_a31ul.mk)
 
 # Inherit some common CM stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
-PRODUCT_NAME := cm_lettuce
-BOARD_VENDOR := yu
-PRODUCT_DEVICE := lettuce
+PRODUCT_NAME := cm_a31ul
+BOARD_VENDOR := htc
+PRODUCT_DEVICE := a31ul
 
-PRODUCT_GMS_CLIENTID_BASE := android-micromax
-
-TARGET_VENDOR_PRODUCT_NAME := YUPHORIA
-TARGET_VENDOR_DEVICE_NAME := YUPHORIA
-PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=YUPHORIA PRODUCT_NAME=YUPHORIA
+TARGET_VENDOR_PRODUCT_NAME := a31ul
+TARGET_VENDOR_DEVICE_NAME := a31ul
+PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=a31ul PRODUCT_NAME=a31ul
 
 ## Use the latest approved GMS identifiers unless running a signed build
 ifneq ($(SIGN_BUILD),true)
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT=YU/YUPHORIA/YUPHORIA:5.0.2/LRX22G/YNG1TBS2P2:user/release-keys \
-    PRIVATE_BUILD_DESC="YUPHORIA-user 5.0.2 LRX22G YNG1TBS2P2 release-keys"
+    BUILD_FINGERPRINT=htc/a31ul_htc_europe/htc_a31ul:4.4.4/KTU84P/439895.1:user/release-keys \
+    PRIVATE_BUILD_DESC="1.02.401.1 CL439895 release-keys"
 endif

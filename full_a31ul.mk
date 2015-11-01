@@ -15,17 +15,17 @@
 #
 
 # Inherit from those products. Most specific first.
-ifneq ($(LETTUCE_32_BIT),true)
+ifneq ($(A31UL_32_BIT),true)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from lettuce device
-$(call inherit-product, device/yu/lettuce/device.mk)
+# Inherit from a31ul device
+$(call inherit-product, device/htc/a31ul/device.mk)
 
 # Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := lettuce
-PRODUCT_NAME := full_lettuce
-PRODUCT_BRAND := YU
-PRODUCT_MODEL := YU5010
-PRODUCT_MANUFACTURER := YU
+PRODUCT_DEVICE := a31ul
+PRODUCT_NAME := full_a31ul
+PRODUCT_BRAND := htc
+PRODUCT_MODEL := HTC Desire 620
+PRODUCT_MANUFACTURER := HTC
