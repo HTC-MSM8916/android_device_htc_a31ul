@@ -90,12 +90,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
-# Sensor HAL
-PRODUCT_PACKAGES += \
-    calmodule.cfg \
-    libcalmodule_akm.so \
-    libcalmodule_common \
-    sensors.msm8916
 
 # Ramdisk
 PRODUCT_PACKAGES += \
