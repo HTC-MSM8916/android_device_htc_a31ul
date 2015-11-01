@@ -45,35 +45,6 @@ for FILE in `egrep -v '(^#|^$)' proprietary-files.txt`; do
     echo "    $OUTDIR/proprietary/$FILE:system/$FILE$LINEEND" >> $MAKEFILE
   fi
 done
-(cat << EOF) >> $MAKEFILE
-
-ifeq (\$(QCPATH),)
-PRODUCT_COPY_FILES += \\
-EOF
-
-LINEEND=" \\"
-COUNT=`wc -l proprietary-files-qc.txt | awk {'print $1'}`
-DISM=`egrep -c '(^#|^$)' proprietary-files-qc.txt`
-COUNT=`expr $COUNT - $DISM`
-for FILE in `egrep -v '(^#|^$)' proprietary-files-qc.txt`; do
-  COUNT=`expr $COUNT - 1`
-  if [ $COUNT = "0" ]; then
-    LINEEND=""
-  fi
-  # Split the file from the destination (format is "file[:destination]")
-  OLDIFS=$IFS IFS=":" PARSING_ARRAY=($FILE) IFS=$OLDIFS
-  if [[ ! "$FILE" =~ ^-.* ]]; then
-    FILE=`echo ${PARSING_ARRAY[0]} | sed -e "s/^-//g"`
-    DEST=${PARSING_ARRAY[1]}
-    if [ -n "$DEST" ]; then
-      FILE=$DEST
-    fi
-    echo "    $OUTDIR/proprietary/$FILE:system/$FILE$LINEEND" >> $MAKEFILE
-  fi
-done
-(cat << EOF) >> $MAKEFILE
-endif
-EOF
 
 (cat << EOF) > ../../../$OUTDIR/$DEVICE-vendor.mk
 # Copyright (C) 2015 The CyanogenMod Project
@@ -94,27 +65,10 @@ EOF
 
 # Pick up overlay for features that depend on non-open-source files
 PRODUCT_PACKAGES += \\
-    com.qualcomm.location
-
-PRODUCT_PACKAGES += \\
-    qcrilmsgtunnel \\
-    shutdownlistener \\
-    TimeService
-
-PRODUCT_PACKAGES += \\
-    qcnvitems \\
-    qcrilhook
-
-PRODUCT_PACKAGES += \\
-    libqct_resampler \\
-    libmm-abl
-
-PRODUCT_PACKAGES += \\
-    libloc_api_v02 \\
-    libloc_ds_api
-
-PRODUCT_PACKAGES += \\
-    libtime_genoff
+    TimeService \\
+    libTimeService \\
+    libtime_genoff \\
+    libFlacSwDec
 
 \$(call inherit-product, vendor/$VENDOR/$DEVICE/$DEVICE-vendor-blobs.mk)
 EOF
@@ -160,133 +114,80 @@ ifeq (\$(TARGET_DEVICE),a31ul)
 ifeq (\$(QCPATH),)
 
 include \$(CLEAR_VARS)
-LOCAL_MODULE := com.qualcomm.location
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/priv-app/com.qualcomm.location/com.qualcomm.location.apk
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE        := TimeService
+LOCAL_MODULE_CLASS  := APPS
+LOCAL_MODULE_OWNER  := qcom
 LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
-LOCAL_MODULE_CLASS := APPS
-LOCAL_PRIVILEGED_MODULE := true
-LOCAL_CERTIFICATE := platform
+LOCAL_MODULE_TAGS   := optional
+LOCAL_CERTIFICATE   := platform
+LOCAL_SRC_FILES     := proprietary/app/TimeService/TimeService.apk
 include \$(BUILD_PREBUILT)
 
 include \$(CLEAR_VARS)
-LOCAL_MODULE := qcrilmsgtunnel
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/app/qcrilmsgtunnel/qcrilmsgtunnel.apk
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
-LOCAL_MODULE_CLASS := APPS
-LOCAL_CERTIFICATE := platform
-include \$(BUILD_PREBUILT)
-
-include \$(CLEAR_VARS)
-LOCAL_MODULE := shutdownlistener
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/app/shutdownlistener/shutdownlistener.apk
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
-LOCAL_MODULE_CLASS := APPS
-LOCAL_CERTIFICATE := platform
-include \$(BUILD_PREBUILT)
-
-include \$(CLEAR_VARS)
-LOCAL_MODULE := TimeService
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/app/TimeService/TimeService.apk
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
-LOCAL_MODULE_CLASS := APPS
-LOCAL_CERTIFICATE := platform
-include \$(BUILD_PREBUILT)
-
-include \$(CLEAR_VARS)
-LOCAL_MODULE := qcnvitems
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/framework/qcnvitems.jar
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_SUFFIX := \$(COMMON_JAVA_PACKAGE_SUFFIX)
-LOCAL_MODULE_CLASS := JAVA_LIBRARIES
-LOCAL_CERTIFICATE := PRESIGNED
-include \$(BUILD_PREBUILT)
-
-include \$(CLEAR_VARS)
-LOCAL_MODULE := qcrilhook
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/framework/qcrilhook.jar
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_SUFFIX := \$(COMMON_JAVA_PACKAGE_SUFFIX)
-LOCAL_MODULE_CLASS := JAVA_LIBRARIES
-LOCAL_CERTIFICATE := PRESIGNED
-include \$(BUILD_PREBUILT)
-
-include \$(CLEAR_VARS)
-LOCAL_MODULE := libloc_api_v02
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES_64 := proprietary/lib64/libloc_api_v02.so
-LOCAL_SRC_FILES_32 := proprietary/lib/libloc_api_v02.so
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE        := libFlacSwDec
+LOCAL_MODULE_CLASS  := SHARED_LIBRARIES
+LOCAL_MODULE_OWNER  := qcom
+LOCAL_MODULE_PATH   := \$(PRODUCT_OUT)/system/vendor/lib
 LOCAL_MODULE_SUFFIX := .so
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH_64 := \$(TARGET_OUT_SHARED_LIBRARIES)
-LOCAL_MODULE_PATH_32 := \$(2ND_TARGET_OUT_SHARED_LIBRARIES)
-LOCAL_MULTILIB := both
+LOCAL_MODULE_TAGS   := optional
+LOCAL_MULTILIB      := 32
+LOCAL_SRC_FILES     := proprietary/vendor/lib/libFlacSwDec.so
 include \$(BUILD_PREBUILT)
 
 include \$(CLEAR_VARS)
-LOCAL_MODULE := libloc_ds_api
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES_64 := proprietary/lib64/libloc_ds_api.so
-LOCAL_SRC_FILES_32 := proprietary/lib/libloc_ds_api.so
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE        := libFlacSwDec
+LOCAL_MODULE_CLASS  := SHARED_LIBRARIES
+LOCAL_MODULE_OWNER  := qcom
+LOCAL_MODULE_PATH   := \$(PRODUCT_OUT)/system/vendor/lib64
 LOCAL_MODULE_SUFFIX := .so
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH_64 := \$(TARGET_OUT_SHARED_LIBRARIES)
-LOCAL_MODULE_PATH_32 := \$(2ND_TARGET_OUT_SHARED_LIBRARIES)
-LOCAL_MULTILIB := both
+LOCAL_MODULE_TAGS   := optional
+LOCAL_MULTILIB      := 64
+LOCAL_SRC_FILES     := proprietary/vendor/lib64/libFlacSwDec.so
 include \$(BUILD_PREBUILT)
 
 include \$(CLEAR_VARS)
-LOCAL_MODULE := libtime_genoff
-LOCAL_MODULE_OWNER := yu
-LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libtime_genoff.so
-LOCAL_SRC_FILES_32 := proprietary/vendor/lib/libtime_genoff.so
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE        := libtime_genoff
+LOCAL_MODULE_CLASS  := SHARED_LIBRARIES
+LOCAL_MODULE_OWNER  := qcom
+LOCAL_MODULE_PATH   := \$(PRODUCT_OUT)/system/vendor/lib
 LOCAL_MODULE_SUFFIX := .so
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH_64 := \$(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
-LOCAL_MODULE_PATH_32 := \$(2ND_TARGET_OUT_VENDOR_SHARED_LIBRARIES)
-LOCAL_MULTILIB := both
-LOCAL_PROPRIETARY_MODULE := true
+LOCAL_MODULE_TAGS   := optional
+LOCAL_MULTILIB      := 32
+LOCAL_SRC_FILES     := proprietary/vendor/lib/libtime_genoff.so
 include \$(BUILD_PREBUILT)
 
 include \$(CLEAR_VARS)
-LOCAL_MODULE := libqct_resampler
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/vendor/lib/libqct_resampler.so
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE        := libtime_genoff
+LOCAL_MODULE_CLASS  := SHARED_LIBRARIES
+LOCAL_MODULE_OWNER  := qcom
+LOCAL_MODULE_PATH   := \$(PRODUCT_OUT)/system/vendor/lib64
 LOCAL_MODULE_SUFFIX := .so
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH := \$(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
-LOCAL_MULTILIB := 32
-LOCAL_PROPRIETARY_MODULE := true
+LOCAL_MODULE_TAGS   := optional
+LOCAL_MULTILIB      := 64
+LOCAL_SRC_FILES     := proprietary/vendor/lib64/libtime_genoff.so
 include \$(BUILD_PREBUILT)
 
 include \$(CLEAR_VARS)
-LOCAL_MODULE := libmm-abl
-LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/vendor/lib64/libmm-abl.so
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE        := libTimeService
+LOCAL_MODULE_CLASS  := SHARED_LIBRARIES
+LOCAL_MODULE_OWNER  := qcom
+LOCAL_MODULE_PATH   := \$(PRODUCT_OUT)/system/vendor/lib
 LOCAL_MODULE_SUFFIX := .so
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH := \$(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
-LOCAL_MULTILIB := 64
-LOCAL_PROPRIETARY_MODULE := true
+LOCAL_MODULE_TAGS   := optional
+LOCAL_MULTILIB      := 32
+LOCAL_SRC_FILES     := proprietary/vendor/lib/libTimeService.so
 include \$(BUILD_PREBUILT)
 
-\$(shell mkdir -p \$(PRODUCT_OUT)/system/vendor/lib/egl && pushd \$(PRODUCT_OUT)/system/vendor/lib > /dev/null && ln -s egl/libEGL_adreno.so libEGL_adreno.so && popd > /dev/null)
-\$(shell mkdir -p \$(PRODUCT_OUT)/system/vendor/lib64/egl && pushd \$(PRODUCT_OUT)/system/vendor/lib64 > /dev/null && ln -s egl/libEGL_adreno.so libEGL_adreno.so && popd > /dev/null)
-
+include \$(CLEAR_VARS)
+LOCAL_MODULE        := libTimeService
+LOCAL_MODULE_CLASS  := SHARED_LIBRARIES
+LOCAL_MODULE_OWNER  := qcom
+LOCAL_MODULE_PATH   := \$(PRODUCT_OUT)/system/vendor/lib64
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_TAGS   := optional
+LOCAL_MULTILIB      := 64
+LOCAL_SRC_FILES     := proprietary/vendor/lib64/libTimeService.so
+include \$(BUILD_PREBUILT)
 endif
 endif
 
