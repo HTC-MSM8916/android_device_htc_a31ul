@@ -101,6 +101,8 @@ public:
     void setPictureFormat(const char *format);
     const char *getPictureFormat() const;
 
+    void getRawSize(int *x, int *y) const;
+
     void dump() const;
     status_t dump(int fd, const Vector<String16>& args) const;
 

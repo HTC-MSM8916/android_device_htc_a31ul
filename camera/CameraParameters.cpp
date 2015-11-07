@@ -473,6 +473,15 @@ const char *CameraParameters::getPictureFormat() const
     return get(KEY_PICTURE_FORMAT);
 }
 
+void CameraParameters::getRawSize(int *x, int *y) const
+{
+    const char *p;
+    *x = *y = -1;
+    p = mParams->get("raw-size");
+    if (p == 0) return;
+    parse_pair(p, x, y, 'x');
+}
+
 void CameraParameters::dump() const
 {
     ALOGD("dump: mMap.size = %zu", mMap.size());

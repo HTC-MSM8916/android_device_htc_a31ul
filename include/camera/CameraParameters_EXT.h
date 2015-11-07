@@ -93,7 +93,6 @@ public:
     static const char DENOISE_ON[];
     static const char DENOISE_OFF[];
 
-private:
     CameraParameters *mParams;
 };
 
