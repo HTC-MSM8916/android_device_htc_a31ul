@@ -433,7 +433,11 @@ void CameraParameters::getPreviewFpsRange(int *min_fps, int *max_fps) const
 
 void CameraParameters::setPreviewFormat(const char *format)
 {
-    set(KEY_PREVIEW_FORMAT, format);
+    if (strcmp(format,PIXEL_FORMAT_YUV420P) != 0) {
+        ALOGD("%s: format: %s, overriding to yuv420p", __FUNCTION__, format);
+        set(KEY_PREVIEW_FORMAT, PIXEL_FORMAT_YUV420P);
+    } else
+        set(KEY_PREVIEW_FORMAT, format);
 }
 
 const char *CameraParameters::getPreviewFormat() const
